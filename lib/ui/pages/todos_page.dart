@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_cubit_doonamis/cubits/todo_list/todo_list_cubit.dart';
+import 'package:todo_cubit_doonamis/ui/widgets/create_todo_widget.dart';
+import 'package:todo_cubit_doonamis/ui/widgets/search_filter_todo_widget.dart';
 import 'package:todo_cubit_doonamis/ui/widgets/show_todos_widget.dart';
 import 'package:todo_cubit_doonamis/ui/widgets/todo_header_widget.dart';
 
@@ -19,10 +21,17 @@ class TodosPage extends StatelessWidget {
             SizedBox(
               height: 70,
             ),
-            TodoHeaderWidget(),
+            TodoHeaderWidget(
+              activeTodoCount: state.activeTodoCount,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            SearchFilterTodoWidget(),
             ShowTodosWidget(
               todos: state.todos,
             ),
+            CreateTodoWidget(),
           ],
         ));
       },

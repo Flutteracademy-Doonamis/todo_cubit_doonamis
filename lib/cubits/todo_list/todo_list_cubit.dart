@@ -48,4 +48,39 @@ class TodoListCubit extends Cubit<TodoListState> {
       state.copyWith(activeTodoCount: activeTodoCount),
     );
   }
+
+  void addTodo(String todoDesc) {
+    final Todo newTodo = Todo(desc: todoDesc);
+    final List<Todo> newTodos = [...state.todos, newTodo];
+    emit(state.copyWith(todos: newTodos));
+    _calculateActiveCount();
+  }
+
+  void removeTodo(Todo todo) {
+    // final List<Todo> newTodos =
+    //     state.todos.where((Todo element) => element.id != todo.id).toList();
+
+    state.todos.remove(todo);
+
+    // initialTodos.remove(todo);
+
+    // final Todo newElement =
+    //     initialTodos.where((element) => todo.id == element.id).toList().first;
+
+    // print(newElement == todo);
+
+    emit(state.copyWith(todos: state.todos));
+    _calculateActiveCount();
+  }
+
+  void searchTodo(Todo todo) {
+    final List<Todo> newTodos = state.todos
+        .where((Todo element) => element.desc.contains(todo.desc))
+        .toList();
+
+    // print(newElement == todo);
+
+    emit(state.copyWith(todos: newTodos));
+    _calculateActiveCount();
+  }
 }

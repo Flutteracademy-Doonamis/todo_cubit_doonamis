@@ -1,33 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_cubit_doonamis/cubits/todo_list/todo_list_cubit.dart';
 import 'package:todo_cubit_doonamis/models/todo_model.dart';
 
-class TodoItemWidget extends StatefulWidget {
+class TodoItemWidget extends StatelessWidget {
   final Todo todo;
+  final VoidCallback? changeTodoValue;
+  final VoidCallback? toggleTodo;
+  final TextEditingController textEditingController;
 
   const TodoItemWidget({
     Key? key,
     required this.todo,
+    this.changeTodoValue,
+    required this.textEditingController,
+    this.toggleTodo,
   }) : super(key: key);
-
-  @override
-  State<TodoItemWidget> createState() => _TodoItemWidgetState();
-}
-
-class _TodoItemWidgetState extends State<TodoItemWidget> {
-  late final TextEditingController editTodoController;
-  @override
-  void initState() {
-    editTodoController = TextEditingController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    editTodoController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +26,7 @@ class _TodoItemWidgetState extends State<TodoItemWidget> {
               return AlertDialog(
                 title: Text("Editar Tarea"),
                 content: TextField(
-                  controller: editTodoController,
+                  controller: textEditingController,
                   autofocus: true,
                   // decoration: InputDecoration(
                   //   errorText:
@@ -52,12 +38,8 @@ class _TodoItemWidgetState extends State<TodoItemWidget> {
                   TextButton(
                     onPressed: () {
                       //CAMBIAR EL VALOR
-                      context.read<TodoListCubit>().editTodo(
-                            widget.todo.id,
-                            editTodoController.text,
-                          );
-
-                      editTodoController.clear();
+                      changeTodoValue ?? changeTodoValue!();
+                      textEditingController.clear();
                       Navigator.pop(context);
                     },
                     child: Text("ACEPTAR"),
@@ -70,15 +52,17 @@ class _TodoItemWidgetState extends State<TodoItemWidget> {
               );
             });
       },
-      title: Text(widget.todo.desc),
+      title: Text(todo.desc),
       leading: Checkbox(
         onChanged: (bool? checked) {
           // toggleTodo();
-          print(widget.todo.id);
-          print(checked);
-          context.read<TodoListCubit>().toggleTodo(widget.todo.id);
+          // print(todo.id);
+          // print(checked);
+
+          //if (toggleTodo != null) toggleTodo!();
+          toggleTodo?.call();
         },
-        value: widget.todo.completed,
+        value: todo.completed,
       ),
     );
   }

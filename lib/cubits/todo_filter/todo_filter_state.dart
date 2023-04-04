@@ -1,0 +1,15 @@
+part of 'todo_filter_cubit.dart';
+
+class TodoFilterState {
+  final Filter filter;
+
+  TodoFilterState({required this.filter});
+
+  factory TodoFilterState.inital() {
+    return TodoFilterState(filter: Filter.all);
+  }
+
+  TodoFilterState copyWith({Filter? filter}) {
+    return TodoFilterState(filter: filter ?? this.filter);
+  }
+}
